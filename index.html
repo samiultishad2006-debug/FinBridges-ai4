@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FinBridge AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f6fd;--sf:#fff;--tx:#12203a;--mu:#5b6a86;--bd:#d9e4f4;--bl:#2563eb;--tl:#0d9488;--pu:#7c3aed;--rd:#dc2626;--am:#b45309;--ok:#047857;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1426;--sf:#142038;--tx:#e8eefc;--mu:#93a3c4;--bd:#25375a;--bl:#6ea0ff;--tl:#2dd4bf;--pu:#a78bfa;--rd:#f87171;--am:#fbbf24;--ok:#34d399;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1426;--sf:#142038;--tx:#e8eefc;--mu:#93a3c4;--bd:#25375a;--bl:#6ea0ff;--tl:#2dd4bf;--pu:#a78bfa;--rd:#f87171;--am:#fbbf24;--ok:#34d399;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 15px/1.5 Manrope,system-ui,sans-serif}
+.app{display:flex;min-height:100vh}
+nav{width:220px;background:var(--sf);border-right:1px solid var(--bd);padding:18px 12px;position:sticky;top:0;height:100vh;flex-shrink:0;display:flex;flex-direction:column;gap:4px}
+.logo{font-weight:800;font-size:19px;padding:4px 10px 14px}.logo b{color:var(--bl)}
+nav button.n{display:block;width:100%;text-align:left;background:none;border:0;color:var(--mu);padding:10px 12px;border-radius:10px;font:600 14px Manrope,sans-serif;cursor:pointer}
+nav button.n.on{background:var(--bl);color:#fff}
+nav button.n:hover:not(.on){background:var(--bg)}
+main{flex:1;padding:22px;max-width:1100px;min-width:0}
+h1{font-size:24px;margin:0 0 4px;font-weight:800}h2{font-size:16px;margin:0 0 10px;font-weight:800}
+.sub{color:var(--mu);margin:0 0 16px}
+.banner{background:color-mix(in srgb,var(--am) 14%,var(--sf));border:1px solid var(--am);border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:16px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:16px;min-width:0}
+a.card,.card.lk{cursor:pointer;text-decoration:none;color:inherit;display:block}
+.card.lk:hover{border-color:var(--bl)}
+.big{font-size:26px;font-weight:800;line-height:1.2}.lbl{color:var(--mu);font-size:13px}
+.bar{height:8px;background:var(--bg);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--tl)}
+.bar.w i{background:var(--am)}.bar.d i{background:var(--rd)}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;max-width:100%}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--bl);outline-offset:2px}
+.btn{background:var(--bl);color:#fff;border:0;border-radius:9px;padding:9px 14px;font-weight:600;cursor:pointer}
+.btn.s{background:var(--bg);color:var(--tx);border:1px solid var(--bd)}.btn.r{background:var(--rd)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.tbl{width:100%;border-collapse:collapse}.tbl td,.tbl th{padding:7px 6px;border-bottom:1px solid var(--bd);text-align:left;font-size:14px}
+.scroll{overflow-x:auto}
+.tag{font-size:12px;padding:2px 8px;border-radius:20px;background:var(--bg);border:1px solid var(--bd);color:var(--mu)}
+.ok{color:var(--ok)}.bad{color:var(--rd)}.warn{color:var(--am)}
+.in{color:var(--ok);font-weight:600}
+.led{border-left:4px solid var(--pu);margin-bottom:12px}
+.led dl{margin:6px 0 0;display:grid;grid-template-columns:130px 1fr;gap:4px 10px;font-size:14px}.led dt{color:var(--mu)}.led dd{margin:0}
+.chat{max-height:340px;overflow:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.m{padding:8px 12px;border-radius:12px;max-width:85%;white-space:pre-wrap}.m.u{background:var(--bl);color:#fff;align-self:flex-end}.m.a{background:var(--bg);border:1px solid var(--bd)}
+.empty{color:var(--mu);padding:14px;text-align:center}
+.dlg{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.dlg .card{max-width:460px;width:100%}
+@media(max-width:760px){.app{flex-direction:column}nav{width:100%;height:auto;position:sticky;top:0;flex-direction:row;overflow-x:auto;z-index:5;border-right:0;border-bottom:1px solid var(--bd);padding:8px;padding-top:calc(8px + env(safe-area-inset-top,0px))}.logo{display:none}nav button.n{width:auto;white-space:nowrap}main{padding:14px}.led dl{grid-template-columns:1fr}}
+.auth{min-height:80vh;display:flex;align-items:center;justify-content:center;width:100%}
+.authc{width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px}
+.authc form{display:flex;flex-direction:column;gap:12px}
+.authc label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+.authc label.chk{flex-direction:row;align-items:center;gap:6px;font-weight:400}
+.authc input{width:100%}.authc input[type=checkbox]{width:auto}
+.authc a{color:var(--bl)}
+.pw{display:flex;gap:6px}
+.msg{padding:8px 12px;border-radius:8px;border:1px solid currentColor;font-size:14px}
+.who{padding:10px 12px;font-weight:700;font-size:14px;border-top:1px solid var(--bd)}
+.chatbox .chat{min-height:320px;max-height:calc(100vh - 340px)}
+.who2{display:block;font-size:12px;color:var(--pu);margin-bottom:2px}
+.hello{margin:auto;text-align:center}.hello h1{font-size:22px}.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.dots{color:var(--mu)}
+</style></head>
+<body>
+<div class="app"><nav id="nav"></nav><main id="main"></main></div>
+<div id="dlg"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const T=new Date(),Y=T.getFullYear(),M=T.getMonth(),DIM=new Date(Y,M+1,0).getDate();
+const dd=n=>iso(new Date(Y,M,Math.max(1,Math.min(n,T.getDate()))));
+const f0=n=>Math.round(n).toLocaleString('en-US');
+const CATS=['Food','Transport','Education','Housing','Healthcare','Shopping','Others'];
+const KEY='finbridge-demo-v1';
+const seed=()=>({v:'dash',tx:[
+{id:1,d:dd(1),n:'Monthly allowance',c:'Others',a:45000,t:'in'},{id:2,d:dd(8),n:'Freelance design',c:'Others',a:8000,t:'in'},
+{id:3,d:dd(1),n:'Rent share',c:'Housing',a:12000,t:'out'},{id:4,d:dd(2),n:'Groceries',c:'Food',a:1200,t:'out'},
+{id:5,d:dd(3),n:'Bus pass',c:'Transport',a:400,t:'out'},{id:6,d:dd(5),n:'Chinese course',c:'Education',a:3500,t:'out'},
+{id:7,d:dd(6),n:'Pharmacy',c:'Healthcare',a:800,t:'out'},{id:8,d:dd(9),n:'Headphones',c:'Shopping',a:2200,t:'out'},
+{id:9,d:dd(10),n:'Dinner out',c:'Food',a:950,t:'out'},{id:10,d:dd(12),n:'Ride share',c:'Transport',a:600,t:'out'},
+{id:11,d:dd(14),n:'Groceries',c:'Food',a:1400,t:'out'},{id:12,d:dd(15),n:'Gift',c:'Others',a:700,t:'out'},
+{id:13,d:dd(16),n:'Textbooks',c:'Education',a:2000,t:'out'}],
+nid:20,budget:35000,save:10000,filter:'month',q:'',cat:'All',sel:{},
+study:{funds:100000,rate:16.8,shock:0,dest:'China',items:[{k:'Tuition',p:3500,a:0},{k:'Accommodation',p:1800,a:600},{k:'Food',p:1500,a:250},{k:'Transport',p:300,a:40},{k:'Insurance',p:400,a:400},{k:'Remittance fees',p:100,a:20}]},
+W:{bal:6000,txLimit:2000,dayLimit:3000,known:['0x1111111111111111111111111111111111111111'],log:[],pending:[],draft:null},
+chat:[],bridge:null});
+let S=seed(),USER=null,DKEY=null,AUTHV='login',AMSG='',AERR=0,AF={},FAILS=0,LOCK=0,BUSY=0;
+const save=()=>{if(!DKEY)return;try{localStorage.setItem(DKEY,JSON.stringify(S))}catch(e){}};
+const seedNew=()=>{const s=seed();s.tx=[];s.budget=30000;s.save=0;s.study.funds=0;s.study.items.forEach(i=>i.a=0);s.W.bal=5000;s.W.known=[];return s};
+function loadData(){S=USER.demo?seed():seedNew();try{const r=localStorage.getItem(DKEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}S.v=S.v||'dash'}
+function startUser(u){USER=u;DKEY=u.demo?'fb-demo':'fb-data-'+u.id;loadData();render()}
+// ---- demo authentication (browser only) ----
+const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b)));
+const unb=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function hashPw(pw,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);return b64(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt,iterations:150000},k,256))}
+const users=()=>{try{return JSON.parse(localStorage.getItem('fb-users')||'{}')}catch(e){return{}}};
+const emailOK=e=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+const pwErr=p=>p.length<8?'Use at least 8 characters.':(!/[a-z]/.test(p)||!/[A-Z]/.test(p))?'Include both upper case and lower case letters.':!/\d/.test(p)?'Include at least one number.':'';
+function setSession(u,rem){const s=JSON.stringify({id:u.id,exp:Date.now()+(rem?7*864e5:2*36e5)});try{(rem?localStorage:sessionStorage).setItem('fb-session',s);(rem?sessionStorage:localStorage).removeItem('fb-session')}catch(e){}}
+function getSession(){for(const st of[sessionStorage,localStorage]){try{const r=st.getItem('fb-session');if(!r)continue;const s=JSON.parse(r);if(s.exp<Date.now()){st.removeItem('fb-session');return{expired:1}}return s}catch(e){}}return null}
+function logout(){try{sessionStorage.removeItem('fb-session');localStorage.removeItem('fb-session')}catch(e){}USER=null;DKEY=null;AUTHV='login';AMSG='';AF={};render()}
+async function doSignup(e){e.preventDefault();const f=new FormData(e.target),name=f.get('name').trim(),em=f.get('email').trim().toLowerCase(),p=f.get('pw'),c=f.get('pw2');AF={name,email:em};let m='';
+if(name.length<2)m='Enter your full name.';else if(!emailOK(em))m='Enter a valid email address.';else if(pwErr(p))m=pwErr(p);else if(p!==c)m='The two passwords do not match.';else if(users()[em])m='An account with this email already exists. Sign in instead.';
+if(m){AMSG=m;AERR=1;return render()}
+const salt=crypto.getRandomValues(new Uint8Array(16)),u=users();u[em]={id:crypto.randomUUID(),name,email:em,salt:b64(salt),hash:await hashPw(p,salt)};
+try{localStorage.setItem('fb-users',JSON.stringify(u))}catch(x){AMSG='Could not save the account: browser storage is unavailable.';AERR=1;return render()}
+AUTHV='login';AMSG='Account created. Sign in to continue.';AERR=0;render()}
+async function doLogin(e){e.preventDefault();const f=new FormData(e.target),em=f.get('email').trim().toLowerCase(),p=f.get('pw');AF={email:em};
+if(Date.now()<LOCK){AMSG='Too many attempts. Try again in '+Math.ceil((LOCK-Date.now())/1000)+' seconds.';AERR=1;return render()}
+if(!emailOK(em)||!p){AMSG='Enter a valid email and your password.';AERR=1;return render()}
+const r=users()[em];let ok=false;if(r)ok=(await hashPw(p,unb(r.salt)))===r.hash;
+if(!ok){if(++FAILS>=5){LOCK=Date.now()+30000;FAILS=0}AMSG='Incorrect email or password.';AERR=1;return render()}
+FAILS=0;setSession(r,f.get('rem')==='on');AMSG='';AF={};startUser(r)}
+function demoLogin(){setSession({id:'demo'},false);AMSG='';startUser({id:'demo',name:'Demo user',demo:1})}
+function sw(v){AUTHV=v;AMSG='';AF={};render()}
+function showPw(){const a=$('#pw'),h=a.type==='password';a.type=h?'text':'password';const b=$('#pw2');if(b)b.type=a.type;$('#pwb').textContent=h?'Hide':'Show'}
+function dlg(t,b){$('#dlg').innerHTML=`<div class="dlg" role="dialog" aria-modal="true"><div class="card"><h2>${t}</h2><p>${b}</p><button class="btn" onclick="$('#dlg').innerHTML=''">Close</button></div></div>`}
+const forgot=()=>dlg('Reset password','Password reset needs email delivery, which this browser-only demo does not have. With Supabase Auth connected, this sends a secure reset link to your email. Until then, no reset can be done here.');
+const google=()=>dlg('Continue with Google','Google sign-in needs a Supabase project with the Google provider enabled and a Google OAuth client, on a site you deploy. It cannot run in this hosted demo, so no sign-in was attempted.');
+function authView(){const L=AUTHV==='login';
+return `<div class="auth"><div class="card authc"><div class="logo" style="padding:0">Fin<b>Bridge</b> AI</div><h1>${L?'Sign in':'Create account'}</h1><p class="sub" style="margin:0">${L?'Welcome back.':'Your records stay private to your account.'}</p>
+${AMSG?`<div class="msg ${AERR?'bad':'ok'}" role="alert">${esc(AMSG)}</div>`:''}
+<form onsubmit="${L?'doLogin':'doSignup'}(event)" novalidate>
+${L?'':`<label>Full name<input name="name" autocomplete="name" maxlength="60" value="${esc(AF.name||'')}"></label>`}
+<label>Email<input name="email" type="email" autocomplete="email" value="${esc(AF.email||'')}"></label>
+<label>Password<span class="pw"><input name="pw" id="pw" type="password" autocomplete="${L?'current-password':'new-password'}"><button type="button" class="btn s" id="pwb" onclick="showPw()">Show</button></span></label>
+${L?'':`<label>Confirm password<input name="pw2" id="pw2" type="password" autocomplete="new-password"></label><div class="lbl">8+ characters with upper case, lower case and a number.</div>`}
+${L?`<div class="row" style="justify-content:space-between;margin:0"><label class="chk"><input type="checkbox" name="rem"> Remember me</label><a href="#" onclick="forgot();return false">Forgot password?</a></div>`:''}
+<button class="btn">${L?'Sign in':'Create account'}</button></form>
+<button class="btn s" onclick="google()">Continue with Google</button>
+<p class="lbl" style="text-align:center;margin:0">${L?'New here? <a href="#" onclick="sw(\'signup\');return false">Create an account</a>':'Have an account? <a href="#" onclick="sw(\'login\');return false">Sign in</a>'}</p>
+<button class="btn s" onclick="demoLogin()">Explore demo with sample data</button>
+<p class="lbl" style="margin:0">Demo authentication: accounts exist only in this browser. Passwords are salted and hashed, never stored as text, but this is not server-side security.</p></div></div>`}
+// ---- deterministic calculations ----
+const mstr=iso(T).slice(0,7);
+const wk0=iso(new Date(Y,M,T.getDate()-6));
+const sum=a=>a.reduce((x,y)=>x+y.a,0);
+const calc=()=>{const m=S.tx.filter(t=>t.d.startsWith(mstr));const inc=sum(m.filter(t=>t.t==='in')),exp=sum(m.filter(t=>t.t==='out'));
+const proj=exp/T.getDate()*DIM;const wk=sum(S.tx.filter(t=>t.t==='out'&&t.d>=wk0));
+const by={};CATS.forEach(c=>by[c]=0);m.filter(t=>t.t==='out').forEach(t=>by[t.c]=(by[t.c]||0)+t.a);
+return{m,inc,exp,proj,wk,by,bal:inc-exp}};
+const sc=(shock=S.study.shock)=>{const s=S.study,plan=s.items.reduce((a,i)=>a+i.p,0),act=s.items.reduce((a,i)=>a+i.a,0),r=s.rate*(1+shock/100);
+return{plan,act,r,bdt:plan*r,gap:plan*r-s.funds,mon:plan/6*r}};
+const FEE=0.5;
+const isAddr=a=>/^0x[0-9a-fA-F]{40}$/.test(a);
+const dayUsed=()=>S.W.log.filter(l=>l.st==='Simulated (not broadcast)'&&l.day===iso(T)).reduce((a,l)=>a+l.amt,0);
+function checks(to,amt,net){const W=S.W,c=[];amt=Number(amt);
+c.push({ok:isAddr(to),blk:1,t:'Recipient is a valid 0x address (format check only, not ownership)'});
+c.push({ok:net==='sim',blk:1,t:'Network: Simulated test network, token tCNY (no real funds)'});
+c.push({ok:isFinite(amt)&&amt>0,blk:1,t:'Amount is a positive number'});
+c.push({ok:amt+FEE<=W.bal,blk:1,t:`Balance covers amount + fee (${FEE} tCNY): ${f0(W.bal)} available`});
+c.push({ok:amt<=W.txLimit,blk:1,t:`Within per-transaction limit (${f0(W.txLimit)} tCNY)`});
+c.push({ok:dayUsed()+amt<=W.dayLimit,blk:1,t:`Within daily limit (${f0(dayUsed())} used of ${f0(W.dayLimit)})`});
+c.push({ok:isAddr(to)?W.known.includes(to.toLowerCase())||W.known.includes(to):false,blk:0,t:'Recipient previously used (new recipients are higher risk)'});
+c.push({ok:amt<=W.bal*0.5,blk:0,t:'Amount is at most 50% of balance'});
+return c}
+// ---- UI ----
+const VIEWS=[['dash','Dashboard'],['exp','Personal finance'],['study','Study abroad'],['wallet','Agent wallet'],['bridge','Intent Bridge'],['ai','Assistant']];
+function go(v){S.v=v;save();render();window.scrollTo(0,0)}
+function theme(){const r=document.documentElement,d=r.dataset.theme==='dark'||(!r.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);r.dataset.theme=d?'light':'dark'}
+function render(){
+if(!USER){$('#nav').style.display='none';$('#main').innerHTML=authView();return}
+$('#nav').style.display='';
+$('#nav').innerHTML='<div class="logo">Fin<b>Bridge</b> AI</div>'+VIEWS.map(([k,l])=>`<button class="n ${S.v===k?'on':''}" onclick="go('${k}')" ${S.v===k?'aria-current="page"':''}>${l}</button>`).join('')+'<div style="flex:1"></div><div class="who">'+esc(USER.name)+(USER.demo?' <span class="tag">demo</span>':'')+'</div><button class="n" onclick="theme()">Light / dark</button>'+(USER.demo?'<button class="n" onclick="resetDemo()">Reset demo data</button>':'')+'<button class="n" onclick="logout()">Sign out</button>';
+$('#main').innerHTML=(USER.demo?'<div class="banner"><b>Demo data.</b> Sample records for exploring only. The wallet is simulated and exchange rates are editable demo values, not live data.</div>':'<div class="banner"><b>Your private workspace.</b> Records here belong to your account on this browser. The wallet is simulated (test tokens only) and exchange rates are values you enter, not live data.</div>')+({dash,exp,study,wallet,bridge,ai})[S.v]()}
+function resetDemo(){if(confirm('Reset all demo data?')){S=seed();save();render()}}
+const bar=(p,c)=>`<div class="bar ${p>100?'d':p>80?'w':''}"><i style="width:${Math.min(100,Math.max(0,p))}%"></i></div>`;
+function insights(){const c=calc(),out=[];
+const top=Object.entries(c.by).sort((a,b)=>b[1]-a[1])[0];
+if(c.exp>0)out.push(`${top[0]} is your largest category: BDT ${f0(top[1])} (${Math.round(top[1]/c.exp*100)}% of spending this month).`);
+if(c.proj>S.budget)out.push(`At the current pace you'll spend about BDT ${f0(c.proj)}, which is BDT ${f0(c.proj-S.budget)} over your budget.`);else out.push(`Projected month-end spending is BDT ${f0(c.proj)}, within your BDT ${f0(S.budget)} budget. This is an estimate from days so far, not a guarantee.`);
+const s=sc();if(s.gap>0)out.push(`The study plan is short by about BDT ${f0(s.gap)} at the demo rate.`);
+const sv=c.inc-c.proj;out.push(sv>=S.save?`Projected savings BDT ${f0(sv)} meet your target of BDT ${f0(S.save)}.`:`Projected savings BDT ${f0(Math.max(0,sv))} are below your target of BDT ${f0(S.save)}. Trimming Shopping and Others is the easiest first step.`);
+return out}
+function dash(){const c=calc(),s=sc(),sh=sc(5),u=c.exp/S.budget*100;const W=S.W;
+const alerts=[];if(c.proj>S.budget)alerts.push('Projected spend exceeds budget');if(s.gap>0)alerts.push('Study plan exceeds declared funds');if(W.pending.length)alerts.push(W.pending.length+' wallet proposal(s) need your decision');
+return `<h1>Dashboard</h1><p class="sub">One view across spending, study costs and wallet proposals.</p>
+<div class="grid">
+<div class="card lk" onclick="go('exp')"><div class="lbl">Net this month (BDT)</div><div class="big">${f0(c.bal)}</div><div class="lbl">Income ${f0(c.inc)} · Expenses ${f0(c.exp)}</div></div>
+<div class="card lk" onclick="go('exp')"><div class="lbl">Budget used</div><div class="big">${Math.round(u)}%</div>${bar(u)}<div class="lbl">Projected month-end: BDT ${f0(c.proj)}</div></div>
+<div class="card lk" onclick="go('study')"><div class="lbl">Study budget (${esc(S.study.dest)})</div><div class="big">CNY ${f0(s.plan)}</div><div class="lbl">≈ BDT ${f0(s.bdt)} vs funds ${f0(S.study.funds)}</div><div class="${s.gap>0?'bad':'ok'}">${s.gap>0?'Shortfall BDT '+f0(s.gap):'Covered, surplus BDT '+f0(-s.gap)}</div></div>
+<div class="card lk" onclick="go('study')"><div class="lbl">If CNY rises 5%</div><div class="big">BDT ${f0(sh.bdt)}</div><div class="lbl">+BDT ${f0(sh.bdt-s.bdt)} on the study plan (demo rate)</div></div>
+<div class="card lk" onclick="go('wallet')"><div class="lbl">Wallet (simulated tCNY)</div><div class="big">${f0(W.bal)}</div><div class="lbl">${W.pending.length} pending proposal(s)</div></div>
+<div class="card lk" onclick="go('bridge')"><div class="lbl">Financial Intent Bridge</div><div style="font-weight:600;margin-top:4px">Describe a goal and get an explainable plan with a wallet proposal you approve.</div></div></div>
+<div class="grid" style="margin-top:14px">
+<div class="card"><h2>AI insights <span class="tag">rule-based</span></h2>${insights().map(i=>`<p style="margin:0 0 8px">${esc(i)}</p>`).join('')}</div>
+<div class="card"><h2>Security alerts</h2>${alerts.length?alerts.map(a=>`<p class="warn" style="margin:0 0 6px">${esc(a)}</p>`).join(''):'<div class="empty">No alerts.</div>'}</div>
+<div class="card lk" onclick="go('exp')"><h2>Recent transactions</h2>${[...S.tx].sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id).slice(0,5).map(t=>`<div class="row" style="justify-content:space-between;margin:0"><span>${esc(t.n)} <span class="tag">${t.c}</span></span><span class="${t.t==='in'?'in':''}">${t.t==='in'?'+':'−'}${f0(t.a)}</span></div>`).join('')}</div></div>`}
+// Personal finance
+function visible(){return S.tx.filter(t=>(S.filter==='all'||(S.filter==='month'?t.d.startsWith(mstr):t.d>=wk0))&&(S.cat==='All'||t.c===S.cat)&&t.n.toLowerCase().includes(S.q.toLowerCase())).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id)}
+function exp(){const c=calc(),v=visible(),selT=v.filter(t=>S.sel[t.id]).reduce((a,t)=>a+(t.t==='out'?t.a:-t.a),0);
+const mx=Math.max(1,...Object.values(c.by));
+const cb=CATS.map((k,i)=>`<div class="row" style="margin:4px 0"><span style="width:90px">${k}</span><div class="bar" style="flex:1;margin:0"><i style="width:${c.by[k]/mx*100}%;background:${['var(--bl)','var(--tl)','var(--pu)'][i%3]}"></i></div><span style="width:70px;text-align:right">${f0(c.by[k])}</span></div>`).join('');
+let cum=0;const pts=[];for(let d=1;d<=T.getDate();d++){cum+=sum(c.m.filter(t=>t.t==='out'&&+t.d.slice(8)===d));pts.push(cum)}
+const W=300,H=110,pm=Math.max(1,...pts,S.budget*0.0+1);
+const line=pts.map((p,i)=>`${(i/(Math.max(1,pts.length-1))*W).toFixed(1)},${(H-p/pm*(H-10)-5).toFixed(1)}`).join(' ');
+return `<h1>Personal finance</h1><p class="sub">All figures are BDT and update the moment you change data.</p>
+<div class="grid"><div class="card"><div class="lbl">Income</div><div class="big in">${f0(c.inc)}</div></div><div class="card"><div class="lbl">Expenses</div><div class="big">${f0(c.exp)}</div></div><div class="card"><div class="lbl">Remaining balance</div><div class="big">${f0(c.bal)}</div></div><div class="card"><div class="lbl">Savings vs target ${f0(S.save)}</div><div class="big">${f0(Math.max(0,c.bal))}</div>${bar(c.bal/S.save*100)}</div></div>
+<div class="grid" style="margin-top:14px"><div class="card"><h2>Spending by category</h2>${cb}</div>
+<div class="card"><h2>Cumulative spending this month</h2><svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Cumulative spending line chart"><polyline fill="none" stroke="var(--bl)" stroke-width="2.5" points="${line}"/></svg><div class="lbl">Day 1 to ${T.getDate()} · total BDT ${f0(c.exp)}</div></div></div>
+<div class="card" style="margin-top:14px"><h2>Add transaction</h2>
+<form class="row" onsubmit="addTx(event)"><input name="n" placeholder="Description" required maxlength="60"><input name="a" type="number" min="1" step="any" placeholder="Amount" required style="width:110px"><select name="c">${CATS.map(k=>`<option>${k}</option>`).join('')}</select><select name="t"><option value="out">Expense</option><option value="in">Income</option></select><input name="d" type="date" value="${iso(T)}" required><button class="btn">Add</button></form>
+<div class="row"><label>Monthly budget <input type="number" min="0" value="${S.budget}" style="width:110px" onchange="S.budget=Math.max(0,+this.value||0);save();render()"></label><label>Savings target <input type="number" min="0" value="${S.save}" style="width:110px" onchange="S.save=Math.max(0,+this.value||0);save();render()"></label></div></div>
+<div class="card" style="margin-top:14px"><h2>Transactions</h2><div class="row"><select onchange="S.filter=this.value;render()"><option value="week" ${S.filter==='week'?'selected':''}>Last 7 days</option><option value="month" ${S.filter==='month'?'selected':''}>This month</option><option value="all" ${S.filter==='all'?'selected':''}>All</option></select><select onchange="S.cat=this.value;render()"><option>All</option>${CATS.map(k=>`<option ${S.cat===k?'selected':''}>${k}</option>`).join('')}</select><input type="search" placeholder="Search" value="${esc(S.q)}" oninput="S.q=this.value;render2()" id="q"><button class="btn s" onclick="csv()">Export CSV</button></div>
+<div class="lbl" style="margin-bottom:6px">Selected net: <b>BDT ${f0(selT)}</b> (${v.filter(t=>S.sel[t.id]).length} selected)</div>
+<div class="scroll">${v.length?`<table class="tbl"><tr><th></th><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr>${v.map(t=>`<tr><td><input type="checkbox" ${S.sel[t.id]?'checked':''} onchange="S.sel[${t.id}]=this.checked;render2()" aria-label="Select ${esc(t.n)}"></td><td>${t.d}</td><td>${esc(t.n)}</td><td>${t.c}</td><td><input type="number" min="1" value="${t.a}" style="width:95px" onchange="editA(${t.id},this.value)" aria-label="Amount"> <span class="tag">${t.t==='in'?'income':'expense'}</span></td><td><button class="btn s" onclick="delTx(${t.id})">Delete</button></td></tr>`).join('')}</table>`:'<div class="empty">No transactions match. Add one above or change the filters.</div>'}</div></div>`}
+function render2(){const p=S.q,pos=document.activeElement&&document.activeElement.id==='q'?document.activeElement.selectionStart:null;render();if(pos!==null){const q=$('#q');q.focus();q.setSelectionRange(pos,pos)}}
+function addTx(e){e.preventDefault();const f=new FormData(e.target),a=+f.get('a');if(!(a>0))return;S.tx.push({id:S.nid++,d:f.get('d'),n:f.get('n').trim(),c:f.get('c'),a,t:f.get('t')});save();render()}
+function editA(id,v){v=+v;if(v>0){S.tx.find(t=>t.id===id).a=v;save()}render()}
+function delTx(id){S.tx=S.tx.filter(t=>t.id!==id);delete S.sel[id];save();render()}
+function csv(){const q=s=>'"'+String(s).replace(/"/g,'""')+'"';const rows=[['date','description','category','type','amount_bdt'],...visible().map(t=>[t.d,t.n,t.c,t.t,t.a])];
+const b=new Blob([rows.map(r=>r.map(q).join(',')).join('\n')],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='finbridge-transactions.csv';a.click()}
+// Study
+function study(){const s=S.study,c=sc(),runs=[0,5,10,-5].map(x=>{const q=sc(x);return[x,q.bdt,q.gap,q.mon>0?s.funds/q.mon:0]});
+return `<h1>Study abroad: ${esc(s.dest)}</h1><p class="sub">Plan per 6-month semester in CNY, converted to BDT.</p>
+<div class="card"><h2>Exchange rate</h2><div class="row"><label>1 CNY = <input type="number" step="0.01" min="0.01" value="${s.rate}" style="width:90px" onchange="setS('rate',this.value)"> BDT</label><span class="tag">Demo sample rate, not live · ${iso(T)}</span></div>
+<div class="lbl">No live source is configured. Enter a rate from your bank or a trusted source; the app does not claim it is live.</div>
+<div class="row" style="margin-top:10px"><label>Scenario: CNY change <input type="range" min="-15" max="20" value="${s.shock}" oninput="setS('shock',this.value)"> <b>${s.shock>0?'+':''}${s.shock}%</b></label></div></div>
+<div class="grid" style="margin-top:14px"><div class="card"><div class="lbl">Semester plan</div><div class="big">CNY ${f0(c.plan)}</div><div class="lbl">≈ BDT ${f0(c.bdt)} at ${c.r.toFixed(2)}</div></div>
+<div class="card"><div class="lbl">Available funds (BDT)</div><input type="number" min="0" value="${s.funds}" style="width:130px;font-size:20px;font-weight:800" onchange="setS('funds',this.value)"><div class="${c.gap>0?'bad':'ok'}" style="margin-top:6px">${c.gap>0?'Shortfall BDT '+f0(c.gap):'Surplus BDT '+f0(-c.gap)}</div></div>
+<div class="card"><div class="lbl">Affordability</div><div class="big">${c.mon>0?(s.funds/c.mon).toFixed(1):'—'} months</div><div class="lbl">Funds last at BDT ${f0(c.mon)}/month</div></div></div>
+<div class="card" style="margin-top:14px"><h2>Planned vs actual (CNY)</h2><div class="scroll"><table class="tbl"><tr><th>Item</th><th>Planned</th><th>Actual</th><th>Difference</th></tr>${s.items.map((i,n)=>`<tr><td>${i.k}</td><td><input type="number" min="0" value="${i.p}" style="width:90px" onchange="setI(${n},'p',this.value)"></td><td><input type="number" min="0" value="${i.a}" style="width:90px" onchange="setI(${n},'a',this.value)"></td><td class="${i.a>i.p?'bad':'ok'}">${f0(i.p-i.a)}</td></tr>`).join('')}<tr><th>Total</th><th>${f0(c.plan)}</th><th>${f0(c.act)}</th><th>${f0(c.plan-c.act)}</th></tr></table></div></div>
+<div class="card" style="margin-top:14px"><h2>Exchange-rate scenarios</h2><div class="scroll"><table class="tbl"><tr><th>CNY change</th><th>Plan cost (BDT)</th><th>Gap vs funds</th><th>Months funded</th></tr>${runs.map(r=>`<tr><td>${r[0]>0?'+':''}${r[0]}%</td><td>${f0(r[1])}</td><td class="${r[2]>0?'bad':'ok'}">${r[2]>0?'-':'+'}${f0(Math.abs(r[2]))}</td><td>${r[3].toFixed(1)}</td></tr>`).join('')}</table></div></div>`}
+function setS(k,v){S.study[k]=+v;if(k==='rate'&&!(S.study.rate>0))S.study.rate=16.8;save();render()}
+function setI(n,k,v){S.study.items[n][k]=Math.max(0,+v||0);save();render()}
+// Wallet
+let PV=null;
+function wallet(){const W=S.W,fm=PV||{to:'',amt:'',memo:''};
+return `<h1>Agent wallet</h1><p class="sub">Simulated wallet. Network: <b>Simulated test network</b>. Token: <b>tCNY</b> (test token, no value). Nothing is ever broadcast.</p>
+<div class="grid"><div class="card"><div class="lbl">Balance</div><div class="big">${f0(W.bal)} tCNY</div><div class="lbl">Receive address (demo): 0x00000000000000000000000000000000000000A1</div></div>
+<div class="card"><h2>Spending limits</h2><div class="row"><label>Per tx <input type="number" min="0" value="${W.txLimit}" style="width:90px" onchange="S.W.txLimit=Math.max(0,+this.value||0);save();render()"></label><label>Per day <input type="number" min="0" value="${W.dayLimit}" style="width:90px" onchange="S.W.dayLimit=Math.max(0,+this.value||0);save();render()"></label></div><div class="lbl">Used today: ${f0(dayUsed())}</div></div></div>
+<div class="card" style="margin-top:14px"><h2>Pending proposals</h2>${W.pending.length?W.pending.map((p,i)=>`<div class="row"><span>${esc(p.memo)}: <b>${f0(p.amt)} tCNY</b></span><button class="btn s" onclick="loadP(${i})">Review</button><button class="btn s" onclick="S.W.pending.splice(${i},1);save();render()">Dismiss</button></div>`).join(''):'<div class="empty">No proposals. The Intent Bridge can prepare one for you.</div>'}</div>
+<div class="card" style="margin-top:14px"><h2>Send</h2><form class="row" onsubmit="preview(event)"><input name="to" placeholder="Recipient 0x…" value="${esc(fm.to)}" style="flex:2;min-width:220px" required><input name="amt" type="number" min="0" step="any" placeholder="Amount (tCNY)" value="${esc(fm.amt)}" style="width:150px" required><input name="memo" placeholder="Note" value="${esc(fm.memo)}" maxlength="60"><button class="btn">Preview</button></form><div class="lbl">Tip: use the known address 0x1111…1111 for a low-risk demo recipient.</div></div>
+<div class="card" style="margin-top:14px"><h2>Audit history</h2>${W.log.length?`<div class="scroll"><table class="tbl"><tr><th>Time</th><th>To</th><th>Amount</th><th>Status</th></tr>${W.log.slice().reverse().map(l=>`<tr><td>${esc(l.time)}</td><td>${esc(l.to.slice(0,8))}…${esc(l.to.slice(-4))}</td><td>${f0(l.amt)}</td><td>${esc(l.st)}</td></tr>`).join('')}</table></div>`:'<div class="empty">No transactions yet.</div>'}</div>`}
+function loadP(i){const p=S.W.pending[i];PV={to:'',amt:p.amt,memo:p.memo,pi:i};render()}
+function preview(e){e.preventDefault();const f=new FormData(e.target),to=f.get('to').trim(),amt=+f.get('amt'),memo=f.get('memo'),ck=checks(to,amt,'sim'),blk=ck.some(c=>!c.ok&&c.blk);
+const pi=PV&&PV.pi!==undefined?PV.pi:-1;PV={to,amt,memo,pi};window._tx={to,amt,memo,pi};
+$('#dlg').innerHTML=`<div class="dlg" role="dialog" aria-modal="true"><div class="card"><h2>Review transaction</h2>
+<p style="margin:0 0 8px">To <b style="word-break:break-all">${esc(to)}</b><br>Amount <b>${f0(amt||0)} tCNY</b> · Fee estimate ${FEE} tCNY<br>Network: Simulated test network (not broadcast)<br>Balance after: ${f0(S.W.bal-(amt||0)-FEE)} tCNY</p>
+${ck.map(c=>`<div class="${c.ok?'ok':c.blk?'bad':'warn'}">${c.ok?'✔':c.blk?'✖ Blocked:':'⚠ Warning:'} ${esc(c.t)}</div>`).join('')}
+<div class="row" style="margin-top:14px"><button class="btn" ${blk?'disabled':''} onclick="approve()">Approve (simulated)</button><button class="btn s" onclick="closeD()">Cancel</button></div>${blk?'<div class="bad">This transaction failed a required check and cannot be submitted.</div>':''}</div></div>`}
+function closeD(){$('#dlg').innerHTML='';render()}
+function approve(){const x=window._tx,ck=checks(x.to,x.amt,'sim');if(ck.some(c=>!c.ok&&c.blk))return;// re-validate at execution time
+S.W.bal-=x.amt+FEE;if(!S.W.known.includes(x.to))S.W.known.push(x.to);
+S.W.log.push({time:new Date().toLocaleString(),to:x.to,amt:x.amt,st:'Simulated (not broadcast)',day:iso(T)});
+if(x.pi>=0)S.W.pending.splice(x.pi,1);PV=null;save();closeD()}
+// Bridge
+function runBridge(){const t=$('#bi').value,low=t.toLowerCase(),m=low.match(/(?:bdt|৳)\s*([\d,]+)/)||low.match(/([\d,]+)\s*(?:bdt|taka)/);
+if(m){const v=+m[1].replace(/,/g,'');if(v>0)S.study.funds=v}
+const dest=/china/.test(low)?'China':S.study.dest;S.study.dest=dest;
+const s=sc(),c=calc(),sv=c.inc-c.proj,pay=/pay|wallet|send|transfer|tuition/.test(low);
+const tui=S.study.items[0].p;
+S.bridge={text:t,pay,L:[
+{rec:`Budget ${esc(dest)} study at CNY ${f0(s.plan)} per semester (about BDT ${f0(s.bdt)}).`,data:`Funds you stated: BDT ${f0(S.study.funds)}. Plan items: ${S.study.items.map(i=>i.k+' '+i.p).join(', ')}.`,as:`Demo rate 1 CNY = ${S.study.rate} BDT (not live). Semester = 6 months. Planned amounts are sample defaults you can edit.`,calc:`${f0(s.plan)} × ${S.study.rate} = ${f0(s.bdt)}; minus funds ${f0(S.study.funds)} = ${s.gap>0?'shortfall ':'surplus '}${f0(Math.abs(s.gap))}.`,risk:s.gap>0?`Shortfall of ${Math.round(s.gap/S.study.funds*100)}% of funds. Costs may differ from the sample plan.`:'Plan fits, but actual costs may differ.',ap:'Information only. No action needed.'},
+{rec:'Keep a buffer for exchange-rate moves.',data:'Scenarios use the demo rate.',as:'Rate shocks apply uniformly to all items.',calc:[0,5,10].map(x=>{const q=sc(x);return `${x>0?'+':''}${x}%: BDT ${f0(q.bdt)} (gap ${q.gap>0?'-':'+'}${f0(Math.abs(q.gap))})`}).join(' | '),risk:'Real rates can move more than these scenarios and are not predicted here.',ap:'Information only.'},
+{rec:s.gap>0?`Save about BDT ${f0(s.gap/6)} per month for 6 months to close the gap.`:'No extra saving required by this plan.',data:c.m.length>=10?`${c.m.length} transactions this month; projected spend BDT ${f0(c.proj)} vs income ${f0(c.inc)}.`:'Fewer than 10 transactions this month, so the estimate is weak.',as:'Spending continues at this month\'s average daily pace.',calc:`Projected monthly surplus = ${f0(c.inc)} − ${f0(c.proj)} = ${f0(sv)}.`,risk:sv*6>=s.gap?'Surplus could cover the gap if income and spending stay stable (not guaranteed).':'Projected surplus does not close the gap.',ap:'Information only.'}]};
+if(pay){const amt=Math.round(tui/2);S.bridge.L.push({rec:`Prepare a wallet proposal for ${f0(amt)} tCNY (50% of tuition, first installment).`,data:`Wallet balance ${f0(S.W.bal)} tCNY; limits ${f0(S.W.txLimit)}/tx, ${f0(S.W.dayLimit)}/day.`,as:'1 tCNY is treated as 1 CNY for this simulation. A full tuition payment would exceed the per-transaction limit, so it is split.',calc:`${f0(tui)} × 50% = ${f0(amt)}; fee ${FEE}; total ${f0(amt+FEE)} vs balance ${f0(S.W.bal)}.`,risk:amt<=S.W.txLimit?'Within limits. Recipient must be entered and is checked again before approval.':'Exceeds the per-transaction limit and would be blocked.',ap:'Not approved. Nothing is sent until you review it in the wallet and approve.',btn:amt})}
+save();render()}
+function sendP(a){S.W.pending.push({amt:a,memo:'Tuition, first installment'});save();go('wallet')}
+function bridge(){const B=S.bridge;
+return `<h1>Financial Intent Bridge</h1><p class="sub">Describe a goal. Every recommendation shows its data, assumptions, math and risks. You can correct the inputs and rerun.</p>
+<div class="card"><textarea id="bi" rows="3" style="width:100%" aria-label="Goal">${esc(B?B.text:'I am a Bangladeshi student planning to study in China. I have BDT 100,000 available. Help me plan my expenses and review a proposed CNY payment.')}</textarea><div class="row" style="margin-top:8px"><button class="btn" onclick="runBridge()">Build plan</button><span class="lbl">Amounts are parsed and calculated deterministically, not by a language model.</span></div></div>
+<div style="margin-top:14px">${B?B.L.map((l,i)=>`<div class="card led"><h2>${i+1}. ${l.rec}</h2><dl><dt>Supporting data</dt><dd>${l.data}</dd><dt>Assumptions</dt><dd>${l.as}</dd><dt>Calculation</dt><dd>${l.calc}</dd><dt>Risks</dt><dd>${l.risk}</dd><dt>Approval</dt><dd>${l.ap}</dd></dl>${l.btn?`<div class="row" style="margin-top:10px"><button class="btn" onclick="sendP(${l.btn})">Send to wallet for review</button></div>`:''}${i<2?`<div class="row" style="margin-top:8px"><button class="btn s" onclick="go('study')">Edit assumptions</button></div>`:''}</div>`).join(''):'<div class="empty">No plan yet. Press Build plan.</div>'}</div>`}
+// Assistant
+function reply(q){const l=q.toLowerCase(),c=calc(),s=sc();
+const pc=l.match(/(-?\d+(?:\.\d+)?)\s*%/);
+if(/exchange|rate|cny|yuan/.test(l)&&pc){const x=+pc[1],n=sc(x);return `If CNY changes ${x>0?'+':''}${x}%, the study plan costs about BDT ${f0(n.bdt)} instead of ${f0(sc(0).bdt)} (difference ${f0(n.bdt-sc(0).bdt)}). Rate used: ${S.study.rate} BDT per CNY, a demo sample.`}
+if(/week/.test(l))return `You spent BDT ${f0(c.wk)} in the last 7 days.`;
+if(/next month|cover|budget/.test(l))return `Your budget is BDT ${f0(S.budget)}. Spending so far is ${f0(c.exp)} and the pace projects to ${f0(c.proj)}. ${c.proj<=S.budget?'That fits, if next month looks like this one.':'That is over budget by about '+f0(c.proj-S.budget)+'.'} This is an estimate, not a guarantee.`;
+if(/tuition|reserve/.test(l)){const t=S.study.items[0].p*s.r;return `Tuition is CNY ${f0(S.study.items[0].p)} (about BDT ${f0(t)}). A 10% buffer for rate moves suggests reserving about BDT ${f0(t*1.1)}.`}
+if(/wallet|transaction|review|send/.test(l))return `Wallet balance is ${f0(S.W.bal)} tCNY (simulated). Limits: ${f0(S.W.txLimit)} per transaction, ${f0(S.W.dayLimit)} per day. ${S.W.pending.length} proposal(s) pending. I can't execute transactions; open the Agent wallet tab to review and approve.`;
+return 'Try: "How much did I spend this week?", "Will my budget cover next month?", "What if the CNY rate rises 5%?", "How much should I reserve for tuition?", or "Review my wallet".'}
+function ai(){return `<h1>Assistant</h1><p class="sub"><span class="tag">Rule-based demo assistant</span> No AI API key is configured. Answers come from your app data and deterministic math.</p>
+<div class="card"><div class="chat" id="ch">${S.chat.length?S.chat.map(m=>`<div class="m ${m.r}">${esc(m.t)}</div>`).join(''):'<div class="empty">Ask a question about your money.</div>'}</div><form class="row" onsubmit="ask(event)"><input id="qi" style="flex:1;min-width:200px" placeholder="Ask something…" required maxlength="200"><button class="btn">Ask</button></form></div>`}
+function ask(e){e.preventDefault();const q=$('#qi').value.trim();if(!q)return;S.chat.push({r:'u',t:q},{r:'a',t:reply(q)});save();render();const c=$('#ch');c.scrollTop=c.scrollHeight}
+// ---- ChatGPT-style assistant ----
+let SAMPLE=null;try{window.claude&&claude.use('sample').then(x=>SAMPLE=x).catch(()=>{})}catch(e){}
+function ctx(){const c=calc(),s=sc();return JSON.stringify({currency:'BDT',month:{income:c.inc,expenses:c.exp,projectedMonthEnd:Math.round(c.proj),budget:S.budget,savingsTarget:S.save,last7DaysSpend:c.wk,byCategory:c.by},studyPlan:{destination:S.study.dest,planCNY:s.plan,rateBDTperCNY:S.study.rate,rateIsLive:false,planBDT:Math.round(s.bdt),fundsBDT:S.study.funds,gapBDT:Math.round(s.gap),items:S.study.items},wallet:{simulatedBalanceTCNY:S.W.bal,perTxLimit:S.W.txLimit,dailyLimit:S.W.dayLimit,pendingProposals:S.W.pending}})}
+const SYS="You are FinBridge AI, a friendly assistant for personal finance, student finance abroad and wallet safety, inside the FinBridge AI app. Reply in short plain text without markdown tables. Use ONLY the figures in APP_DATA for the user's own money; never invent balances, rates or transactions, and say so when data is missing. Exchange rates in APP_DATA are user-entered demo values, not live. You cannot send money; wallet transactions are approved by the user in the Agent wallet tab. Never ask for passwords, private keys or seed phrases. Present projections as estimates, not guarantees. General finance questions are welcome.";
+function chatHTML(){return S.chat.length?S.chat.map(m=>`<div class="m ${m.r}">${m.r==='a'?`<b class="who2">FinBridge AI ${m.src?`<span class="tag">${m.src==='rules'?'rule-based demo':m.src==='cmd'?'voice command':'Claude'}</span>`:''}</b>`:''}${esc(m.t)||'<span class="dots">Thinking…</span>'}</div>`).join(''):`<div class="hello"><h1>How can I help with your money today?</h1><div class="chips">${['How much did I spend this week?','Will my budget cover next month?','What if the CNY rate rises 5%?','How much should I reserve for tuition?','Review my wallet limits'].map(q=>`<button class="btn s" onclick="send(${JSON.stringify(q).replace(/"/g,'&quot;')})">${esc(q)}</button>`).join('')}</div></div>`}
+function ai(){return `<div class="row" style="justify-content:space-between"><div><h1>Assistant</h1><p class="sub" style="margin:0">Answers use your app's figures. It cannot send money.</p></div><button class="btn s" onclick="S.chat=[];save();render()">New chat</button></div><div class="card chatbox"><div class="chat" id="ch">${chatHTML()}</div><div class="row" style="margin:0;flex-wrap:nowrap"><textarea id="qi" rows="1" aria-label="Message" placeholder="Message FinBridge AI" maxlength="500" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send()}" style="flex:1;resize:none"></textarea><button class="btn s" id="mic" onclick="mic()" aria-label="Voice input">🎙 Mic</button><button class="btn" id="sb" onclick="send()">Send</button></div><div class="row" style="margin:8px 0 0"><select aria-label="Voice language" onchange="VL=this.value"><option value="en-US">English</option><option value="bn-BD" ${VL==='bn-BD'?'selected':''}>বাংলা</option></select><button class="btn s" id="spk" onclick="toggleSpk()">Voice reply: ${SPK?'on':'off'}</button><span class="lbl">Try: "add expense 500 food lunch", "open wallet", "how much did I spend this week"</span></div><div class="lbl" style="margin-top:6px">Your message and a summary of your figures are sent to Claude to answer. If Claude is unavailable, a rule-based fallback answers instead. Never share passwords or keys.</div></div>`}
+async function send(q){const i=$('#qi');q=(q||(i&&i.value)||'').trim();if(!q||BUSY)return;if(i)i.value='';BUSY=1;const sb=$('#sb');if(sb)sb.disabled=true;
+S.chat.push({r:'u',t:q});const m={r:'a',t:'',src:''};S.chat.push(m);
+const upd=()=>{const c=$('#ch');if(c){c.innerHTML=chatHTML();c.scrollTop=c.scrollHeight}};upd();
+try{if(!SAMPLE)throw{code:'none'};const h=S.chat.slice(0,-2).slice(-8).map(x=>({role:x.r==='u'?'user':'assistant',content:x.t||'(no reply)'}));
+h.push({role:'user',content:SYS+'\n\nAPP_DATA: '+ctx()+'\n\nUSER QUESTION: '+q});
+const r=await SAMPLE(h,{cache:false,onText:({text})=>{m.t=text;m.src='claude';upd()}});m.t=r.text||m.t;m.src='claude'}
+catch(e){if(!m.t){m.t=reply(q);m.src='rules'}}
+BUSY=0;save();upd();say(m.t);const b=$('#sb');if(b)b.disabled=false}
+setInterval(()=>{if(USER&&!USER.demo){const s=getSession();if(!s||s.expired){logout();AMSG='Your session expired. Please sign in again.';AERR=1;render()}}},30000);
+function boot(){const s=getSession();let u=null;
+if(s&&s.expired){AMSG='Your session expired. Please sign in again.';AERR=1}
+else if(s&&s.id==='demo')u={id:'demo',name:'Demo user',demo:1};
+else if(s)u=Object.values(users()).find(x=>x.id===s.id)||null;
+if(u)startUser(u);else render()}
+// ---- voice commands ----
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let REC=null,VL='en-US',SPK=false;
+const NAV={dashboard:'dash',home:'dash',expense:'exp',personal:'exp',study:'study',wallet:'wallet',bridge:'bridge',assistant:'ai',chat:'ai'};
+function toggleSpk(){SPK=!SPK;if(!SPK&&window.speechSynthesis)speechSynthesis.cancel();const b=$('#spk');if(b)b.textContent='Voice reply: '+(SPK?'on':'off')}
+function say(t){if(!SPK||!t||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=VL;speechSynthesis.speak(u)}
+function mic(){if(!SR){dlg('Voice input not supported','This browser has no speech recognition. Use Chrome, Edge or Safari, or type your message.');return}
+if(REC){REC.stop();return}
+const r=REC=new SR();r.lang=VL;r.interimResults=false;r.maxAlternatives=1;
+r.onstart=()=>{const b=$('#mic');if(b)b.textContent='Listening… tap to stop'};
+r.onresult=e=>voice(e.results[0][0].transcript);
+r.onerror=e=>{const m={'not-allowed':'Microphone access is blocked. Allow the microphone for this site in your browser settings, or type instead.','service-not-allowed':'Microphone access is blocked here. Allow it in your browser settings, or type instead.','no-speech':'No speech heard. Tap Mic and try again.','network':'The browser speech service could not be reached.'};dlg('Voice input problem',m[e.error]||'Voice input failed ('+esc(e.error)+').')};
+r.onend=()=>{REC=null;const b=$('#mic');if(b)b.textContent='🎙 Mic'};
+try{r.start()}catch(e){REC=null}}
+function cmdReply(u,a){go('ai');S.chat.push({r:'u',t:'🎙 '+u},{r:'a',t:a,src:'cmd'});save();render();const c=$('#ch');if(c)c.scrollTop=c.scrollHeight;say(a)}
+function voice(t){const l=t.toLowerCase().trim();let m;
+if(/\b(approve|confirm|submit)\b/.test(l)||/\b(send|transfer|pay)\b.*\d/.test(l))return cmdReply(t,'For your safety, transactions cannot be approved or sent by voice. Open the Agent wallet, review the preview and tap Approve yourself.');
+if(m=l.match(/\badd\s+(?:an?\s+)?(expense|income)\s+(?:of\s+)?(\d+(?:\.\d+)?)\s*(?:taka|bdt|tk)?\s*(?:for|on)?\s*(.*)$/)){const a=+m[2],inc=m[1]==='income',n=(m[3]||'').trim()||(inc?'Income':'Expense');
+const cm={Food:/food|lunch|dinner|breakfast|grocer|snack|tea|coffee/,Transport:/bus|ride|taxi|train|transport|fuel/,Housing:/rent|housing|electric|utility|bill/,Education:/course|book|tuition|school|education|exam/,Healthcare:/medicine|pharmacy|doctor|health|hospital/,Shopping:/shop|cloth|shoe|gadget/};
+const c=inc?'Others':(Object.keys(cm).find(k=>cm[k].test(n))||'Others');
+if(!(a>0))return cmdReply(t,'I could not read a valid amount. Try: add expense 500 food lunch.');
+S.tx.push({id:S.nid++,d:iso(T),n:n.slice(0,60),c,a,t:inc?'in':'out'});
+return cmdReply(t,'Added '+(inc?'income':'expense')+' BDT '+f0(a)+' ('+c+'): '+n+'. You can edit or delete it in Personal finance.')}
+if(m=l.match(/^(?:open|go to|show(?: me)?)\s+(?:the\s+)?(.+)$/)){const k=Object.keys(NAV).find(k=>m[1].includes(k));if(k){go(NAV[k]);say('Opening '+k);return}}
+if(S.v!=='ai')go('ai');send(t)}
+boot();
+</script></body></html>
